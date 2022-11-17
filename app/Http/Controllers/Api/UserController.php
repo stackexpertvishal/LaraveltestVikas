@@ -4,19 +4,21 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use JWTAuth;
+use Auth;
 use App\Models\User;
 use App\Models\Transaction;
 use App\Traits\ApiResponseTrait;
 use App\Classes\ErrorsClass;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
     use ApiResponseTrait;
     
+   
     public function addMoneyToWallet(Request $request){
-        try {
+         try {
             $validator = Validator::make($request->json()->all(), [
                 'amount' => 'required',
             ]);
@@ -24,13 +26,14 @@ class UserController extends Controller
                 return $this->errorResponse($validator->messages(), 400);
             }
             $data = $request->json()->all();
-            $header = $request->header('Authorization');
-            $userId = $this->jwtTokenDecodeResponse($header);
+            $header = auth()->user();
+            $userId = $header->id;
             $userDetail = User::find($userId);
             if($userDetail){
                 if($data['amount']>=3 && $data['amount']<=100){
                     $userDetail->wallet = $userDetail->wallet+$data['amount'];
                     $userDetail->save();
+                 
                     if($userDetail){
                         $transaction = new Transaction();
                         $transaction->user_id = $userId;
@@ -40,10 +43,10 @@ class UserController extends Controller
                     }
                     return $this->successResponse($userDetail);
                 }else{
-                    return $this->errorResponse('Something went wrong', 400, 'Amount add minimum 3$ and maximum 100$');
+                    return $this->errorResponse('Something went wrong', 400, 'Amount should be minimum 3$ and maximum 100$');
                 }
             }else{
-                return $this->errorResponse('Something went wrong', 400, 'user not found over system');
+                return $this->errorResponse('Something went wrong', 400, 'User not found');
             }
         
             } catch(\Illuminate\Database\QueryException $e) {
@@ -67,11 +70,12 @@ class UserController extends Controller
             }
             $data = $request->json()->all();
             $header = $request->header('Authorization');
-            $userId = $this->jwtTokenDecodeResponse($header);
+            $header = auth()->user();
+            $userId = $header->id;
             $userDetail = User::find($userId);
             if($userDetail){
                 if($data['cookie_quntity'] < 1 || $data['cookie_quntity'] > 10){
-                    return $this->errorResponse('Something went wrong', 400, 'Cookie quntity buy mimimum 1$ and maximum 10$');
+                    return $this->errorResponse('Something went wrong', 400, 'Cookie quntity must be mimimum 1$ and maximum 10$');
                 }
                 if($userDetail->wallet >= $data['cookie_quntity']){
                     $userDetail->wallet = $userDetail->wallet-$data['cookie_quntity'];
@@ -88,7 +92,7 @@ class UserController extends Controller
                     return $this->errorResponse('Something went wrong', 400, 'Insufficient Balance');
                 }
             }else{
-                return $this->errorResponse('Something went wrong', 400, 'user not found over system');
+                return $this->errorResponse('Something went wrong', 400, 'User not found');
             }
             } catch(\Illuminate\Database\QueryException $e) {
                 $errorClass = new ErrorsClass();

@@ -1,17 +1,15 @@
 # Laravel Assignment
 
 ## Scope
-### This application has APIs for login and register API
-
-# Step 1 Create user 
-# Step 2 Login user 
-# Step 3 Copy Token from login API response
-# Step 4 Please add token in header for wallet and buy cookie API
-# Step 5 You can check both of API i.e add money to wallet and buy a cookie
-
+### This application has APIs for login, register, add money to wallet and Buy Cookies 
+# setp 1 = Create User 
+# step 2 = Login User
+# step 3 - copy the token
+# step 4 - add token in headers and hit addMoneyToWallet api 
+# step 5 - for purchasing the cookie you must hit api buyCookie
 
 ## Requirements
-### PHP version 7.4.26 or above and composer
+### PHP version 8.0 or above and composer
 
 ## Please run following commands for setup after cloning
 
@@ -26,5 +24,4 @@ php artisan jwt:secret
 
 ```
 php artisan migrate
-```
 ```

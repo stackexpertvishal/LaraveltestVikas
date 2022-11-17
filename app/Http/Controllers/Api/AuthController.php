@@ -14,6 +14,10 @@ use App\Classes\ErrorsClass;
 class AuthController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => ['login','register']]);
+    }
     // using response trait for global format of the reponses
     use ApiResponseTrait;
 
@@ -28,7 +32,7 @@ class AuthController extends Controller
                 return $this->errorResponse($validator->messages(), 422);
             }
             $credentials = $request->only('email', 'password');
-            if (! $token = JWTAuth::attempt($credentials)) {
+            if (! $token = auth()->attempt($credentials)) {
                 return $this->errorResponse('invalid credentails', 401, 'unauthenticated');
             }
             $user = Auth::user();
@@ -65,7 +69,6 @@ class AuthController extends Controller
             $user->token = $token;
             return $this->successResponse($user);
         } catch(\Illuminate\Database\QueryException $e) {
-            new log();
             $errorClass = new ErrorsClass();
             $errors = $errorClass->saveErrors($e);
             Log::info($e);

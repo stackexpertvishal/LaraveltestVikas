@@ -44,10 +44,10 @@ trait ApiResponseTrait {
         ], $code);
     }
 
-    public function jwtTokenDecodeResponse($header){
-        $convertStringToArray =  explode(" ",$header);
-        $token =$convertStringToArray[1];
-        $tokenDetail = JWTAuth::getPayload($token)->toArray();
-        return $userId = $tokenDetail['sub'];
-    }
+    // public function jwtTokenDecodeResponse($header){
+    //     $convertStringToArray =  explode(" ",$header);
+    //     $token =$convertStringToArray[1];
+    //     $tokenDetail = JWTAuth::getPayload($token)->toArray();
+    //     return $userId = $tokenDetail['sub'];
+    // }
 }

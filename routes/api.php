@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
+// use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
@@ -29,4 +29,3 @@ Route::group(['middleware' => ['api','jwt.verify']], function () {
     Route::post('addMoneyToWallet', [App\Http\Controllers\Api\UserController::class, 'addMoneyToWallet']);
     Route::post('buyCookie', [App\Http\Controllers\Api\UserController::class, 'buyCookie']);
 });
-
