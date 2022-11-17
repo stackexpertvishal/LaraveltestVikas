@@ -49,8 +49,10 @@ class UserController extends Controller
             } catch(\Illuminate\Database\QueryException $e) {
                 $errorClass = new ErrorsClass();
                 $errors = $errorClass->saveErrors($e);
+                Log::info($e);
                 return $this->sqlResponse();
             } catch(\Exception $e) {
+                Log::info($e);
                 return $this->undefinedResponse();
          }  
     }
@@ -91,8 +93,10 @@ class UserController extends Controller
             } catch(\Illuminate\Database\QueryException $e) {
                 $errorClass = new ErrorsClass();
                 $errors = $errorClass->saveErrors($e);
+                Log::info($e);
                 return $this->sqlResponse();
             } catch(\Exception $e) {
+                Log::info($e);
                 return $this->undefinedResponse();
         }  
     }
