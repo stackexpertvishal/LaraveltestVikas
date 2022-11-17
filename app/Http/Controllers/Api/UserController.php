@@ -17,7 +17,6 @@ class UserController extends Controller
     
     public function addMoneyToWallet(Request $request){
         try {
-           
             $validator = Validator::make($request->json()->all(), [
                 'amount' => 'required',
             ]);
@@ -34,7 +33,7 @@ class UserController extends Controller
                     $userDetail->save();
                     if($userDetail){
                         $transaction = new Transaction();
-                        $transaction->user_id  = $userId;
+                        $transaction->user_id = $userId;
                         $transaction->wallet  =  $data['amount'];
                         $transaction->type    = 'credit';
                         $transaction->save();
